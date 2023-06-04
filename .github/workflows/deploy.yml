@@ -12,15 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup SSH Keys and known_hosts
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      - name: Setup SSH key
+        uses: shimataro/ssh-key-action@v2.5.1
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'test'
+      - name: Setup known_hosts
         run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+          ssh-keyscan -H ${{ secrets.SSH_SERVER }} >> ~/.ssh/known_hosts
       - name: Run Command
         env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          DOCKER_HOST: ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }}
+          DOCKER_HOST: ${{ secrets.SSH_SERVER }}
         run: |
           docker compose up --build -d
