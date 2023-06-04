@@ -21,7 +21,5 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.SSH_SERVER }} >> ~/.ssh/known_hosts
       - name: Run Command
-        env:
-          DOCKER_HOST: ${{ secrets.SSH_SERVER }}
         run: |
-          docker compose up --build -d
+          DOCKER_HOST=${{ secrets.SSH_SERVER }} docker compose up --build -d
