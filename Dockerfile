@@ -14,7 +14,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY . .
 RUN pnpm run build
 
-FROM nginx:1.24.0-alpine AS runtime
+FROM nginx:1.24.0-alpine-slim AS runtime
 COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
