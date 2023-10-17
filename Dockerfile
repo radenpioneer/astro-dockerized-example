@@ -1,4 +1,4 @@
-FROM node:18.16.0-alpine AS base
+FROM node:20.8.1-alpine AS base
 RUN apk update && apk add --no-cache libc6-compat
 RUN npm i -g pnpm
 
